@@ -228,7 +228,15 @@
         import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, addDoc, writeBatch, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Firebase 설정 (이 값들은 외부 환경에서 제공됩니다)
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const firebaseConfig = {
+          apiKey: "AIzaSyBRivTyWTU-WnC0AmYWwt3dxAzPDRKHwQo",
+          authDomain: "tripandmoney-36323.firebaseapp.com",
+          projectId: "tripandmoney-36323",
+          storageBucket: "tripandmoney-36323.firebasestorage.app",
+          messagingSenderId: "470487936419",
+          appId: "1:470487936419:web:4ef354e99f28466b2d7e16",
+          measurementId: "G-YMBJCBEX54"
+        };
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-trip-splitter';
 
         // Firebase 앱 초기화
