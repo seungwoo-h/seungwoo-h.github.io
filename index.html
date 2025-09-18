@@ -1,773 +1,614 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>여행 경비 정산기</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>肌タイプ診断テスト</title>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .modal-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 50;
+            padding: 20px;
         }
-        .modal-content {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 0.5rem;
-            width: 90%;
+
+        .container {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(123, 44, 64, 0.1);
             max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
+            width: 100%;
+            padding: 40px;
+            border: 1px solid #f5f5f5;
+            animation: slideUp 0.5s ease;
+            position: relative;
         }
-        .hidden { display: none; }
+
+        .logo-main {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 30px;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: #7b2c40;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #999;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #f8f8f8;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #7b2c40;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .question-container {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #7b2c40;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .question {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn-back {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            background: transparent;
+            color: #999;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: underline;
+        }
+
+        .back-btn:hover {
+            color: #7b2c40;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px 30px;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .btn-yes {
+            background: #7b2c40;
+            color: white;
+            box-shadow: 0 4px 15px rgba(123, 44, 64, 0.2);
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(123, 44, 64, 0.3);
+            background: #692638;
+        }
+
+        .btn-no {
+            background: white;
+            color: #7b2c40;
+            border: 2px solid #7b2c40;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-no:hover {
+            background: #faf5f6;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-container {
+            text-align: center;
+            animation: zoomIn 0.5s ease;
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .result-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .result-type {
+            display: inline-block;
+            background: #7b2c40;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(123, 44, 64, 0.2);
+        }
+
+        .result-description {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .recommend-section {
+            background: #faf5f6;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .recommend-title {
+            font-size: 18px;
+            color: #7b2c40;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .product-item {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .product-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 10px rgba(123, 44, 64, 0.15);
+            background: #fff9fa;
+        }
+
+        .product-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .product-arrow {
+            color: #7b2c40;
+            font-size: 18px;
+        }
+
+        .restart-btn {
+            padding: 15px 40px;
+            background: #7b2c40;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(123, 44, 64, 0.2);
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(123, 44, 64, 0.3);
+            background: #692638;
+        }
+
+        #startScreen {
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+            padding-top: 20px;
+        }
+
+        .start-emoji {
+            font-size: 100px;
+            margin-bottom: 30px;
+        }
+
+        .start-description {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .start-btn {
+            padding: 15px 50px;
+            background: #7b2c40;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(123, 44, 64, 0.2);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(123, 44, 64, 0.3);
+            background: #692638;
+        }
+
+        /* 반응형 조정 */
+        @media (max-width: 480px) {
+            .logo-main {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .result-logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
-
-    <div id="app" class="container mx-auto p-4 md:p-6 max-w-4xl">
-
-        <!-- 초기 화면: 여행 생성 또는 참여 -->
-        <div id="home-screen">
-            <div class="bg-white p-8 rounded-xl shadow-lg text-center">
-                <h1 class="text-3xl md:text-4xl font-bold mb-2 text-gray-900">프리스크 여행 경비 정산기</h1>
-                <p class="text-gray-600 mb-6">여행 경비를 간편하게 관리하고 정산하세요. - by 유령 슨노</p>
-                <div class="text-left bg-gray-50 p-4 rounded-lg mb-6">
-                    <p class="font-semibold text-gray-700">내 고유 ID:</p>
-                    <p id="user-id" class="text-lg font-mono bg-gray-200 p-2 rounded break-all">인증 중...</p>
-                    <p class="text-sm text-gray-500 mt-2">이 ID는 앱이 사용자를 식별하기 위해 사용됩니다.</p>
-                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-3">
-                        <p class="text-xs text-yellow-800">⚠️ <strong>주의:</strong> 다른 기기, 브라우저(사파리, 카카오 등), 시크릿모드 사용 시 다른 사용자로 인식됩니다.</p>
-                    </div>
-                </div>
-                <div class="flex flex-col md:flex-row gap-4 justify-center">
-                    <button id="create-trip-btn" class="w-full md:w-auto bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300" disabled>새로운 여행 만들기</button>
-                    <button id="join-trip-btn" class="w-full md:w-auto bg-gray-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-800 transition duration-300" disabled>기존 여행 참여하기</button>
-                </div>
-            </div>
+<body>
+    <div class="container">
+        <h1>肌タイプ診断テスト</h1>
+        <p class="subtitle">あなたの肌タイプをチェック</p>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
         </div>
 
-        <!-- 여행 대시보드 화면 -->
-        <div id="trip-dashboard" class="hidden">
-            <div class="flex justify-between items-center mb-4">
-                <h1 id="trip-name-header" class="text-2xl md:text-3xl font-bold text-gray-900"></h1>
-                <button id="back-to-home-btn" class="bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition">뒤로가기</button>
-            </div>
-            <div class="bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-lg mb-6">
-                <p class="font-semibold">여행 초대 코드:</p>
-                <div class="flex items-center gap-2 mt-1">
-                    <span id="trip-id-display" class="text-xl font-mono p-2 bg-blue-100 rounded break-all"></span>
-                    <button id="copy-trip-id-btn" class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700">복사</button>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- 왼쪽 컬럼: 참여자 및 설정 -->
-                <div class="md:col-span-1 space-y-6">
-                    <!-- 참여자 목록 -->
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <h2 class="text-xl font-bold mb-4">참여자</h2>
-                        <ul id="participants-list" class="space-y-2"></ul>
-                    </div>
-                    <!-- 통화 및 환율 설정 -->
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <h2 class="text-xl font-bold mb-4">통화 및 환율 설정</h2>
-                        <div>
-                            <label for="main-currency" class="block text-sm font-medium text-gray-700">기본 통화</label>
-                            <input type="text" id="main-currency" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="예: KRW">
-                        </div>
-                        <div id="exchange-rates" class="mt-4 space-y-2">
-                            <h3 class="font-semibold">환율 (기본 통화 기준)</h3>
-                        </div>
-                        <button id="add-currency-btn" class="mt-4 text-sm text-blue-600 hover:underline">+ 다른 통화 추가</button>
-                        <button id="save-currency-btn" class="mt-4 w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition">설정 저장</button>
-                    </div>
-                </div>
-
-                <!-- 오른쪽 컬럼: 경비 및 정산 -->
-                <div class="md:col-span-2 space-y-6">
-                    <!-- 경비 추가 버튼 -->
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                         <h2 class="text-xl font-bold mb-4">경비 관리</h2>
-                        <button id="add-expense-btn" class="w-full bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition duration-300">경비 내역 추가하기</button>
-                    </div>
-                    <!-- 정산 결과 -->
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <h2 class="text-xl font-bold mb-4">정산 결과</h2>
-                        <p id="settlement-loading" class="text-gray-500">경비 내역을 바탕으로 정산 결과를 계산 중입니다...</p>
-                        <div id="settlement-summary">
-                            <p class="font-semibold">총 여행 경비: <span id="total-expense" class="font-bold text-blue-600"></span></p>
-                        </div>
-                        <ul id="settlement-results" class="mt-4 space-y-2">
-                            <!-- 정산 결과가 여기에 표시됩니다. 예: "A가 B에게 10,000원 보내기" -->
-                        </ul>
-                    </div>
-                    <!-- 경비 목록 -->
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-bold">경비 목록</h2>
-                            <button id="settle-all-btn" class="bg-yellow-500 text-white font-semibold py-1 px-3 rounded-lg hover:bg-yellow-600 transition text-sm">보이는 내역 중간 정산</button>
-                        </div>
-                        <div id="expenses-list" class="space-y-4">
-                            <!-- 경비 항목이 여기에 표시됩니다. -->
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div id="startScreen">
+            <img src="https://dp.image-qoo10.jp/dp2016/JP/GMKT.IMG/front_image/minishop/2024/03/19/e3f368a7-3fa0-43ba-b542-a3f1ae8b686c.s_110-w-fs-st_s.jpg" alt="Logo" class="logo-main">
+            <p class="start-description">
+                簡単な質問に答えるだけで<br>
+                あなたの肌のタイプを診断しましょう。
+            </p>
+            <button class="start-btn" onclick="startDiagnosis()">診断スタート</button>
         </div>
+
+        <div id="questionArea" style="display: none;"></div>
+        <div id="resultArea" style="display: none;"></div>
     </div>
 
-    <!-- 모달: 새로운 여행 만들기 -->
-    <div id="create-trip-modal" class="modal-backdrop hidden">
-        <div class="modal-content">
-            <h2 class="text-2xl font-bold mb-4">새로운 여행 만들기</h2>
-            <form id="create-trip-form">
-                <div class="mb-4">
-                    <label for="trip-name" class="block text-sm font-medium text-gray-700">여행 이름</label>
-                    <input type="text" id="trip-name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                </div>
-                <div class="mb-4">
-                    <label for="creator-name" class="block text-sm font-medium text-gray-700">내 이름</label>
-                    <input type="text" id="creator-name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                </div>
-                <div class="flex justify-end gap-4">
-                    <button type="button" class="modal-close-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300">취소</button>
-                    <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">만들기</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- 모달: 기존 여행 참여하기 -->
-    <div id="join-trip-modal" class="modal-backdrop hidden">
-        <div class="modal-content">
-            <h2 class="text-2xl font-bold mb-4">기존 여행 참여하기</h2>
-            <form id="join-trip-form">
-                <div class="mb-4">
-                    <label for="trip-id-input" class="block text-sm font-medium text-gray-700">여행 초대 코드</label>
-                    <input type="text" id="trip-id-input" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                </div>
-                <div class="mb-4">
-                    <label for="joiner-name" class="block text-sm font-medium text-gray-700">내 이름</label>
-                    <input type="text" id="joiner-name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                </div>
-                <div class="flex justify-end gap-4">
-                    <button type="button" class="modal-close-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300">취소</button>
-                    <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">참여하기</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <!-- 모달: 경비 추가하기 -->
-    <div id="add-expense-modal" class="modal-backdrop hidden">
-        <div class="modal-content">
-            <h2 class="text-2xl font-bold mb-4">경비 추가</h2>
-            <form id="add-expense-form">
-                <div class="mb-4">
-                    <label for="expense-desc" class="block text-sm font-medium text-gray-700">내용</label>
-                    <input type="text" id="expense-desc" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="예: 저녁 식사">
-                </div>
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label for="expense-amount" class="block text-sm font-medium text-gray-700">금액</label>
-                        <input type="number" id="expense-amount" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="예: 50000">
-                    </div>
-                    <div>
-                        <label for="expense-currency" class="block text-sm font-medium text-gray-700">통화</label>
-                        <select id="expense-currency" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></select>
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <label for="expense-payer" class="block text-sm font-medium text-gray-700">결제한 사람</label>
-                    <select id="expense-payer" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></select>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">누구를 위한 비용인가요?</label>
-                    <div id="expense-participants" class="mt-2 space-y-2 border border-gray-300 rounded-md p-3 max-h-40 overflow-y-auto">
-                        <!-- 참여자 체크박스 목록 -->
-                    </div>
-                     <button type="button" id="select-all-participants" class="mt-2 text-sm text-blue-600 hover:underline">전체 선택</button>
-                </div>
-                <div class="flex justify-end gap-4">
-                    <button type="button" class="modal-close-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300">취소</button>
-                    <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700">추가하기</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- 모달: 확인/취소 -->
-    <div id="confirm-modal" class="modal-backdrop hidden">
-        <div class="modal-content text-center">
-            <h2 id="confirm-modal-title" class="text-xl font-bold mb-4">확인</h2>
-            <p id="confirm-modal-text" class="mb-6">이 작업을 정말로 실행하시겠습니까?</p>
-            <div class="flex justify-center gap-4">
-                <button id="confirm-modal-cancel-btn" class="bg-gray-200 text-gray-700 py-2 px-6 rounded-lg hover:bg-gray-300">취소</button>
-                <button id="confirm-modal-confirm-btn" class="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700">확인</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 알림 메시지 -->
-    <div id="toast-notification" class="fixed bottom-5 right-5 bg-gray-900 text-white py-2 px-4 rounded-lg shadow-lg opacity-0 transition-opacity duration-300">
-        메시지가 여기에 표시됩니다.
-    </div>
-
-
-    <script type="module">
-        // Firebase SDK 가져오기
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, addDoc, writeBatch, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Firebase 설정 (이 값들은 외부 환경에서 제공됩니다)
-        const firebaseConfig = {
-          apiKey: "AIzaSyBRivTyWTU-WnC0AmYWwt3dxAzPDRKHwQo",
-          authDomain: "tripandmoney-36323.firebaseapp.com",
-          projectId: "tripandmoney-36323",
-          storageBucket: "tripandmoney-36323.firebasestorage.app",
-          messagingSenderId: "470487936419",
-          appId: "1:470487936419:web:4ef354e99f28466b2d7e16",
-          measurementId: "G-YMBJCBEX54"
+    <script>
+        const questions = {
+            Q1: {
+                text: "洗顔後、肌がつっぱる",
+                yes: "Q2",
+                no: "Q5"
+            },
+            Q2: {
+                text: "目元・口元の乾燥が気になる",
+                yes: "Q3",
+                no: "Q4"
+            },
+            Q3: {
+                text: "保湿しても時間が経つと乾燥する",
+                yes: "Q4",
+                no: "Q4"
+            },
+            Q4: {
+                text: "冬は化粧のノリが悪い",
+                yes: "dry",
+                no: "Q9"
+            },
+            Q5: {
+                text: "ニキビ・吹き出物がよくできる",
+                yes: "Q6",
+                no: "Q8"
+            },
+            Q6: {
+                text: "毛穴の広がりが目立つ",
+                yes: "Q7",
+                no: "Q9"
+            },
+            Q7: {
+                text: "肌にべたつきやギトギト感がある",
+                yes: "oily",
+                no: "trouble"
+            },
+            Q8: {
+                text: "季節の変わり目に肌の調子が悪くなる",
+                yes: "Q9",
+                no: "Q4"
+            },
+            Q9: {
+                text: "刺激に弱く赤みやかゆみが出やすい",
+                yes: "sensitive",
+                no: "Q7"
+            }
         };
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-trip-splitter';
 
-        // Firebase 앱 초기화
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        const results = {
+            dry: {
+                emoji: "💧",
+                type: "乾燥肌",
+                description: "肌が乾燥しやすく、つっぱり感があるタイプです。十分な保湿と水分補給が必要で、油分と水分のバランスを整えることが大切です。リッチなクリームや美容液で、肌にうるおいを与えましょう。",
+                products: [
+                    { name: "キュリペアダーマアンプル", url: "https://www.qoo10.jp/g/917815058" },
+                    { name: "キュリペア ソリューション", url: "https://www.qoo10.jp/g/1048654649" },
+                    { name: "キュリペア メラクリーム", url: "https://www.qoo10.jp/g/917815387" },
+                    { name: "キュリペア メルダーSOSシステム", url: "https://www.qoo10.jp/g/979244228" },
+                    { name: "キュリペア サンドラッピング", url: "https://www.qoo10.jp/g/1127360604" },
+                    { name: "キュリペア シグネチャーアンプル", url: "https://www.qoo10.jp/g/1023479127" }
+                ]
+            },
+            oily: {
+                emoji: "✨",
+                type: "脂性肌",
+                description: "皮脂分泌が活発なタイプです。丁寧なクレンジングと共に、過剰な皮脂をコントロールしながらも水分は十分に補給することが重要です。さっぱりタイプの化粧水と軽めの乳液がおすすめです。",
+                products: [
+                    { name: "クレイプライムパックトゥフォーム", url: "https://www.qoo10.jp/g/998398572" },
+                    { name: "キュリペアダーマアンプル", url: "https://www.qoo10.jp/g/917815058" },
+                    { name: "キュリペア メラクリーム", url: "https://www.qoo10.jp/g/917815387" },
+                    { name: "キュリペア サンドラッピング", url: "https://www.qoo10.jp/g/1127360604" }
+                ]
+            },
+            trouble: {
+                emoji: "🌿",
+                type: "トラブル肌",
+                description: "ニキビやトラブルが起きやすいタイプです。低刺激の製品を使用し、肌への刺激を最小限に抑えて鎮静ケアに集中することが良いでしょう。清潔を保ちながら、優しいケアを心がけましょう。",
+                products: [
+                    { name: "キュリペアダーマアンプル", url: "https://www.qoo10.jp/g/917815058" },
+                    { name: "キュリペア メラクリーム", url: "https://www.qoo10.jp/g/917815387" },
+                    { name: "キュリペア メルダーSOSシステム", url: "https://www.qoo10.jp/g/979244228" },
+                    { name: "キュリペア サンドラッピング", url: "https://www.qoo10.jp/g/1127360604" }
+                ]
+            },
+            sensitive: {
+                emoji: "🌸",
+                type: "敏感肌",
+                description: "外部刺激に敏感に反応するタイプです。低刺激性の製品を使用し、新しい製品はパッチテストをしてから使用することをお勧めします。肌のバリア機能を強化する優しいケアが大切です。",
+                products: [
+                    { name: "クレイプライムパックトゥフォーム", url: "https://www.qoo10.jp/g/998398572" },
+                    { name: "キュリペアソリューション", url: "https://www.qoo10.jp/g/1048654649" },
+                    { name: "キュリペア メラクリーム", url: "https://www.qoo10.jp/g/917815387" },
+                    { name: "キュリペア メルダーSOSシステム", url: "https://www.qoo10.jp/g/979244228" },
+                    { name: "キュリペア サンドラッピング", url: "https://www.qoo10.jp/g/1127360604" },
+                    { name: "キュリペア シグネチャーアンプル", url: "https://www.qoo10.jp/g/1023479127" }
+                ]
+            }
+        };
 
-        // 전역 상태 변수
-        let currentUser = null;
-        let currentTripId = null;
-        let tripUnsubscribe = null;
-        let expensesUnsubscribe = null;
-        let tripData = {};
-        let confirmCallback = null;
+        let currentQuestion = "Q1";
+        let questionCount = 0;
+        let totalQuestions = 0;
+        let questionHistory = [];
 
-        // UI 요소
-        const homeScreen = document.getElementById('home-screen');
-        const tripDashboard = document.getElementById('trip-dashboard');
-        const userIdDisplay = document.getElementById('user-id');
-        const createTripBtn = document.getElementById('create-trip-btn');
-        const joinTripBtn = document.getElementById('join-trip-btn');
-
-        // 모달 관련 요소
-        const createTripModal = document.getElementById('create-trip-modal');
-        const joinTripModal = document.getElementById('join-trip-modal');
-        const addExpenseModal = document.getElementById('add-expense-modal');
-        const confirmModal = document.getElementById('confirm-modal');
-        
-        // 알림 함수
-        function showToast(message) {
-            const toast = document.getElementById('toast-notification');
-            toast.textContent = message;
-            toast.classList.remove('opacity-0');
-            setTimeout(() => {
-                toast.classList.add('opacity-0');
-            }, 3000);
+        function startDiagnosis() {
+            questionHistory = [];
+            questionCount = 0;
+            currentQuestion = "Q1";
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('questionArea').style.display = 'block';
+            showQuestion(currentQuestion);
         }
 
-        // --- 인증 관리 ---
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-                userIdDisplay.textContent = user.uid;
-                createTripBtn.disabled = false;
-                joinTripBtn.disabled = false;
-                createTripBtn.textContent = "새로운 여행 만들기";
-                joinTripBtn.textContent = "기존 여행 참여하기";
+        function showQuestion(questionId) {
+            const question = questions[questionId];
+            if (!question) return;
+
+            if (!questionHistory.includes(questionId)) {
+                questionCount++;
+            }
+            updateProgressBar();
+
+            const showBackButton = questionHistory.length > 0 ? 
+                `<div class="btn-back">
+                    <button class="back-btn" onclick="goBack()">← 前の質問に戻る</button>
+                </div>` : '';
+
+            const questionArea = document.getElementById('questionArea');
+            questionArea.innerHTML = `
+                <div class="question-container">
+                    <span class="question-number">質問 ${questionCount}</span>
+                    <div class="question">${question.text}</div>
+                    <div class="btn-group">
+                        <button class="btn btn-yes" onclick="answer('${questionId}', true)">はい</button>
+                        <button class="btn btn-no" onclick="answer('${questionId}', false)">いいえ</button>
+                    </div>
+                    ${showBackButton}
+                </div>
+            `;
+        }
+
+        function answer(questionId, isYes) {
+            const question = questions[questionId];
+            const nextStep = isYes ? question.yes : question.no;
+
+            // 현재 질문과 답변을 히스토리에 저장
+            questionHistory.push({
+                questionId: questionId,
+                answer: isYes
+            });
+
+            if (results[nextStep]) {
+                showResult(nextStep);
             } else {
-                const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-                if (initialAuthToken) {
-                    signInWithCustomToken(auth, initialAuthToken).catch((error) => {
-                        console.error("커스텀 토큰 로그인 실패:", error);
-                        userIdDisplay.textContent = "인증 실패";
-                    });
+                currentQuestion = nextStep;
+                showQuestion(nextStep);
+            }
+        }
+
+        function goBack() {
+            if (questionHistory.length > 0) {
+                // 마지막 항목 제거
+                questionHistory.pop();
+                questionCount--;
+                
+                if (questionHistory.length === 0) {
+                    // 첫 질문으로 돌아가기
+                    currentQuestion = "Q1";
                 } else {
-                    signInAnonymously(auth).catch((error) => {
-                        console.error("익명 로그인 실패:", error);
-                        userIdDisplay.textContent = "인증 실패";
-                    });
-                }
-            }
-        });
-
-        // --- 화면 전환 ---
-        function showScreen(screen) {
-            homeScreen.classList.add('hidden');
-            tripDashboard.classList.add('hidden');
-            screen.classList.remove('hidden');
-        }
-
-        document.getElementById('back-to-home-btn').addEventListener('click', () => {
-            if (tripUnsubscribe) tripUnsubscribe();
-            if (expensesUnsubscribe) expensesUnsubscribe();
-            currentTripId = null;
-            sessionStorage.removeItem('currentTripId');
-            showScreen(homeScreen);
-        });
-
-        // --- 모달 관리 ---
-        function openModal(modal) { modal.classList.remove('hidden'); }
-        function closeModal(modal) { modal.classList.add('hidden'); }
-
-        createTripBtn.addEventListener('click', () => openModal(createTripModal));
-        joinTripBtn.addEventListener('click', () => openModal(joinTripModal));
-        document.getElementById('add-expense-btn').addEventListener('click', () => openModal(addExpenseModal));
-        
-        document.querySelectorAll('.modal-close-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => closeModal(e.target.closest('.modal-backdrop')));
-        });
-
-        // --- 확인 모달 로직 ---
-        function showConfirm(title, text, onConfirm) {
-            document.getElementById('confirm-modal-title').textContent = title;
-            document.getElementById('confirm-modal-text').textContent = text;
-            confirmCallback = onConfirm;
-            openModal(confirmModal);
-        }
-
-        document.getElementById('confirm-modal-confirm-btn').addEventListener('click', () => {
-            if (confirmCallback) {
-                confirmCallback();
-            }
-            closeModal(confirmModal);
-            confirmCallback = null;
-        });
-
-        document.getElementById('confirm-modal-cancel-btn').addEventListener('click', () => {
-            closeModal(confirmModal);
-            confirmCallback = null;
-        });
-
-        // --- 여행 생성 및 참여 ---
-        document.getElementById('create-trip-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!currentUser) {
-                showToast("사용자 인증 정보를 불러오는 중입니다. 잠시 후 다시 시도하세요.");
-                return;
-            }
-            const tripName = document.getElementById('trip-name').value;
-            const creatorName = document.getElementById('creator-name').value;
-            const tripId = Math.random().toString(36).substring(2, 8).toUpperCase();
-
-            const newTripData = {
-                tripName,
-                creatorId: currentUser.uid,
-                participants: { [currentUser.uid]: creatorName },
-                mainCurrency: 'KRW',
-                exchangeRates: { 'USD': 1300 },
-                createdAt: new Date()
-            };
-
-            try {
-                const tripRef = doc(db, `artifacts/${appId}/public/data/trips`, tripId);
-                await setDoc(tripRef, newTripData);
-                closeModal(createTripModal);
-                showToast(`여행 "${tripName}"이(가) 생성되었습니다!`);
-                joinTrip(tripId);
-            } catch (error) {
-                console.error("여행 생성 오류:", error);
-                showToast("여행 생성에 실패했습니다.");
-            }
-        });
-
-        document.getElementById('join-trip-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!currentUser) {
-                showToast("사용자 인증 정보를 불러오는 중입니다. 잠시 후 다시 시도하세요.");
-                return;
-            }
-            const tripId = document.getElementById('trip-id-input').value.toUpperCase();
-            const joinerName = document.getElementById('joiner-name').value;
-            
-            const tripRef = doc(db, `artifacts/${appId}/public/data/trips`, tripId);
-            try {
-                const tripSnap = await getDoc(tripRef);
-                if (!tripSnap.exists()) {
-                    showToast("존재하지 않는 여행 코드입니다.");
-                    return;
+                    // 이전 질문의 답변에 따라 현재 위치 결정
+                    const lastItem = questionHistory[questionHistory.length - 1];
+                    const lastQuestion = questions[lastItem.questionId];
+                    currentQuestion = lastItem.answer ? lastQuestion.yes : lastQuestion.no;
                 }
                 
-                await updateDoc(tripRef, {
-                    [`participants.${currentUser.uid}`]: joinerName
-                });
-
-                closeModal(joinTripModal);
-                showToast("여행에 성공적으로 참여했습니다!");
-                joinTrip(tripId);
-
-            } catch (error) {
-                console.error("여행 참여 오류:", error);
-                showToast("여행 참여에 실패했습니다.");
-            }
-        });
-
-        function joinTrip(tripId) {
-            currentTripId = tripId;
-            sessionStorage.setItem('currentTripId', tripId);
-            showScreen(tripDashboard);
-            listenToTripData();
-        }
-
-        // --- 실시간 데이터 리스너 ---
-        function listenToTripData() {
-            if (!currentTripId) return;
-
-            if (tripUnsubscribe) tripUnsubscribe();
-            if (expensesUnsubscribe) expensesUnsubscribe();
-
-            const tripRef = doc(db, `artifacts/${appId}/public/data/trips`, currentTripId);
-            tripUnsubscribe = onSnapshot(tripRef, (doc) => {
-                if (doc.exists()) {
-                    tripData = doc.data();
-                    updateDashboardUI(tripData);
-                    updateExpenseForm(tripData);
-                    listenToExpenses(); 
-                } else {
-                    showToast("여행 정보를 불러올 수 없습니다.");
-                    document.getElementById('back-to-home-btn').click();
-                }
-            });
-        }
-        
-        function listenToExpenses() {
-            if (!currentTripId) return;
-            const expensesRef = collection(db, `artifacts/${appId}/public/data/trips/${currentTripId}/expenses`);
-            expensesUnsubscribe = onSnapshot(expensesRef, (querySnapshot) => {
-                const expenses = [];
-                querySnapshot.forEach((doc) => {
-                    expenses.push({ id: doc.id, ...doc.data() });
-                });
-                expenses.sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate());
-                updateExpensesList(expenses);
-                calculateSettlement(expenses, tripData);
-            });
-        }
-        
-        // --- UI 업데이트 ---
-        function updateDashboardUI(data) {
-            document.getElementById('trip-name-header').textContent = data.tripName;
-            document.getElementById('trip-id-display').textContent = currentTripId;
-            
-            const participantsList = document.getElementById('participants-list');
-            participantsList.innerHTML = '';
-            for (const [id, name] of Object.entries(data.participants)) {
-                const li = document.createElement('li');
-                li.className = 'flex items-center gap-2';
-                li.innerHTML = `<span class="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs font-bold">${name.charAt(0)}</span><span>${name}</span>`;
-                participantsList.appendChild(li);
-            }
-            
-            document.getElementById('main-currency').value = data.mainCurrency;
-            const ratesContainer = document.getElementById('exchange-rates');
-            ratesContainer.innerHTML = '<h3 class="font-semibold">환율 (기본 통화 기준)</h3>';
-            for (const [currency, rate] of Object.entries(data.exchangeRates || {})) {
-                addCurrencyInput(currency, rate);
+                showQuestion(currentQuestion);
             }
         }
-        
-        function updateExpenseForm(data) {
-            const payerSelect = document.getElementById('expense-payer');
-            const participantsChecklist = document.getElementById('expense-participants');
-            const currencySelect = document.getElementById('expense-currency');
+
+        function showResult(resultType) {
+            const result = results[resultType];
+            updateProgressBar(100);
+
+            document.getElementById('questionArea').style.display = 'none';
+            document.getElementById('resultArea').style.display = 'block';
             
-            payerSelect.innerHTML = '';
-            participantsChecklist.innerHTML = '';
-            currencySelect.innerHTML = '';
-
-            for (const [id, name] of Object.entries(data.participants)) {
-                const option = document.createElement('option');
-                option.value = id;
-                option.textContent = name;
-                payerSelect.appendChild(option.cloneNode(true));
-
-                const div = document.createElement('div');
-                div.className = 'flex items-center';
-                div.innerHTML = `
-                    <input id="participant-${id}" name="participants" type="checkbox" value="${id}" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                    <label for="participant-${id}" class="ml-3 block text-sm text-gray-900">${name}</label>
+            let productsHTML = '';
+            result.products.forEach(product => {
+                productsHTML += `
+                    <a href="${product.url}" target="_blank" class="product-item">
+                        <span class="product-name">${product.name}</span>
+                        <span class="product-arrow">→</span>
+                    </a>
                 `;
-                participantsChecklist.appendChild(div);
-            }
+            });
             
-            const mainCurrencyOption = document.createElement('option');
-            mainCurrencyOption.value = data.mainCurrency;
-            mainCurrencyOption.textContent = data.mainCurrency;
-            currencySelect.appendChild(mainCurrencyOption);
-
-            for (const currency in data.exchangeRates) {
-                 const option = document.createElement('option');
-                 option.value = currency;
-                 option.textContent = currency;
-                 currencySelect.appendChild(option);
-            }
-        }
-        
-        function updateExpensesList(expenses) {
-            const listEl = document.getElementById('expenses-list');
-            listEl.innerHTML = '';
-            if (expenses.length === 0) {
-                listEl.innerHTML = '<p class="text-gray-500">아직 추가된 경비가 없습니다.</p>';
-                return;
-            }
-            
-            expenses.forEach(expense => {
-                const expenseEl = document.createElement('div');
-                const payerName = tripData.participants[expense.paidBy] || '알 수 없음';
-                const paidForNames = expense.paidFor.map(id => tripData.participants[id] || '알 수 없음').join(', ');
-                const formattedAmount = new Intl.NumberFormat().format(expense.amount);
-                const isSettled = expense.isSettled || false;
-
-                expenseEl.className = `p-4 rounded-lg border ${isSettled ? 'bg-gray-100 text-gray-500' : 'bg-white'}`;
-                expenseEl.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="font-bold">${expense.description}</p>
-                            <p class="text-sm text-gray-600">${payerName}(이)가 ${formattedAmount} ${expense.currency} 결제</p>
-                            <p class="text-xs text-gray-500 mt-1">대상: ${paidForNames}</p>
+            const resultArea = document.getElementById('resultArea');
+            resultArea.innerHTML = `
+                <div class="result-container">
+                    <img src="https://dp.image-qoo10.jp/dp2016/JP/GMKT.IMG/front_image/minishop/2024/03/19/e3f368a7-3fa0-43ba-b542-a3f1ae8b686c.s_110-w-fs-st_s.jpg" alt="Logo" class="result-logo">
+                    <div class="result-title">あなたの肌タイプは</div>
+                    <div class="result-type">${result.type}</div>
+                    <div class="result-description">${result.description}</div>
+                    <div class="recommend-section">
+                        <div class="recommend-title">おすすめ製品</div>
+                        <div class="product-list">
+                            ${productsHTML}
                         </div>
-                        ${isSettled ? '<span class="text-sm font-semibold text-green-600">정산완료</span>' : `<button data-id="${expense.id}" class="delete-expense-btn text-red-500 hover:text-red-700 text-xs">삭제</button>`}
                     </div>
-                `;
-                listEl.appendChild(expenseEl);
-            });
-            
-            document.querySelectorAll('.delete-expense-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const expenseId = e.target.dataset.id;
-                    showConfirm("경비 삭제", "이 경비 내역을 삭제하시겠습니까?", async () => {
-                       try {
-                           const expenseRef = doc(db, `artifacts/${appId}/public/data/trips/${currentTripId}/expenses`, expenseId);
-                           const batch = writeBatch(db);
-                           batch.delete(expenseRef);
-                           await batch.commit();
-                           showToast("경비 내역이 삭제되었습니다.");
-                       } catch (error) {
-                           console.error("경비 삭제 오류:", error);
-                           showToast("경비 삭제에 실패했습니다.");
-                       }
-                    });
-                });
-            });
-        }
-
-        // --- 통화 및 환율 관리 ---
-        document.getElementById('add-currency-btn').addEventListener('click', () => {
-            const currency = prompt("추가할 통화 코드를 입력하세요 (예: USD, JPY):");
-            if (currency && currency.trim() !== '') {
-                addCurrencyInput(currency.toUpperCase(), '');
-            }
-        });
-
-        function addCurrencyInput(currency, rate) {
-            const ratesContainer = document.getElementById('exchange-rates');
-            const div = document.createElement('div');
-            div.className = 'flex items-center gap-2';
-            div.innerHTML = `
-                <label class="w-16">${currency}</label>
-                <input type="number" data-currency="${currency}" value="${rate}" class="flex-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="환율">
+                    <button class="restart-btn" onclick="restart()">もう一度診断する</button>
+                </div>
             `;
-            ratesContainer.appendChild(div);
         }
-        
-        document.getElementById('save-currency-btn').addEventListener('click', async () => {
-             const mainCurrency = document.getElementById('main-currency').value.toUpperCase();
-             const exchangeRates = {};
-             document.querySelectorAll('#exchange-rates input').forEach(input => {
-                 const currency = input.dataset.currency;
-                 const rate = parseFloat(input.value);
-                 if (currency && !isNaN(rate)) {
-                     exchangeRates[currency] = rate;
-                 }
-             });
-             
-             try {
-                const tripRef = doc(db, `artifacts/${appId}/public/data/trips`, currentTripId);
-                await updateDoc(tripRef, { mainCurrency, exchangeRates });
-                showToast("통화 및 환율 설정이 저장되었습니다.");
-             } catch (error) {
-                 console.error("통화 설정 저장 오류:", error);
-                 showToast("설정 저장에 실패했습니다.");
-             }
-        });
 
-        // --- 경비 추가 로직 ---
-        document.getElementById('select-all-participants').addEventListener('click', () => {
-            document.querySelectorAll('#expense-participants input[type="checkbox"]').forEach(checkbox => {
-                checkbox.checked = true;
-            });
-        });
-        
-        document.getElementById('add-expense-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const description = document.getElementById('expense-desc').value;
-            const amount = parseFloat(document.getElementById('expense-amount').value);
-            const currency = document.getElementById('expense-currency').value;
-            const paidBy = document.getElementById('expense-payer').value;
-            const paidFor = Array.from(document.querySelectorAll('#expense-participants input:checked')).map(el => el.value);
-            
-            if (paidFor.length === 0) {
-                showToast("비용 대상자를 한 명 이상 선택해야 합니다.");
-                return;
-            }
-            
-            const newExpense = { description, amount, currency, paidBy, paidFor, isSettled: false, createdAt: new Date() };
-            
-            try {
-                const expensesRef = collection(db, `artifacts/${appId}/public/data/trips/${currentTripId}/expenses`);
-                await addDoc(expensesRef, newExpense);
-                showToast("경비가 추가되었습니다.");
-                closeModal(addExpenseModal);
-                e.target.reset();
-            } catch (error) {
-                console.error("경비 추가 오류:", error);
-                showToast("경비 추가에 실패했습니다.");
-            }
-        });
-
-        // --- 정산 로직 ---
-        function calculateSettlement(expenses, tripConfig) {
-            const settlementLoading = document.getElementById('settlement-loading');
-            const settlementResults = document.getElementById('settlement-results');
-            const totalExpenseEl = document.getElementById('total-expense');
-
-            settlementResults.innerHTML = '';
-            const unsettledExpenses = expenses.filter(e => !e.isSettled);
-            
-            if (unsettledExpenses.length === 0) {
-                settlementLoading.textContent = "정산할 내역이 없습니다.";
-                totalExpenseEl.textContent = '0 ' + (tripConfig.mainCurrency || '');
-                return;
-            }
-            settlementLoading.textContent = "";
-
-            const balances = {};
-            let totalExpenseInMainCurrency = 0;
-            const participants = Object.keys(tripConfig.participants);
-            participants.forEach(p => balances[p] = 0);
-
-            unsettledExpenses.forEach(expense => {
-                let amountInMain = expense.amount;
-                if (expense.currency !== tripConfig.mainCurrency) {
-                    amountInMain *= (tripConfig.exchangeRates[expense.currency] || 1);
-                }
-                totalExpenseInMainCurrency += amountInMain;
-
-                balances[expense.paidBy] += amountInMain;
-                const share = amountInMain / expense.paidFor.length;
-                expense.paidFor.forEach(person => {
-                    balances[person] -= share;
-                });
-            });
-            
-            totalExpenseEl.textContent = `${new Intl.NumberFormat().format(Math.round(totalExpenseInMainCurrency))} ${tripConfig.mainCurrency}`;
-
-            const debtors = [];
-            const creditors = [];
-
-            for (const person in balances) {
-                if (balances[person] < -0.01) { debtors.push({ id: person, amount: -balances[person] }); } 
-                else if (balances[person] > 0.01) { creditors.push({ id: person, amount: balances[person] }); }
-            }
-
-            const transactions = [];
-            while (debtors.length > 0 && creditors.length > 0) {
-                const debtor = debtors[0];
-                const creditor = creditors[0];
-                const amount = Math.min(debtor.amount, creditor.amount);
-
-                transactions.push({ from: debtor.id, to: creditor.id, amount: amount });
-
-                debtor.amount -= amount;
-                creditor.amount -= amount;
-
-                if (debtor.amount < 0.01) debtors.shift();
-                if (creditor.amount < 0.01) creditors.shift();
-            }
-
-            if (transactions.length === 0) {
-                settlementResults.innerHTML = '<p class="text-green-600 font-semibold">모든 정산이 완료되었습니다!</p>';
-            } else {
-                transactions.forEach(t => {
-                    const li = document.createElement('li');
-                    li.className = 'p-3 bg-gray-50 rounded-md';
-                    const fromName = tripConfig.participants[t.from];
-                    const toName = tripConfig.participants[t.to];
-                    li.innerHTML = `
-                        <span class="font-semibold text-red-600">${fromName}</span> → 
-                        <span class="font-semibold text-green-600">${toName}</span>: 
-                        <span class="font-bold">${new Intl.NumberFormat().format(Math.round(t.amount))} ${tripConfig.mainCurrency}</span>
-                    `;
-                    settlementResults.appendChild(li);
-                });
-            }
+        function updateProgressBar(percentage = null) {
+            const progressBar = document.getElementById('progressBar');
+            const progress = percentage !== null ? percentage : (questionCount / 9) * 100;
+            progressBar.style.width = progress + '%';
         }
-        
-        // --- 중간 정산 로직 ---
-        document.getElementById('settle-all-btn').addEventListener('click', async () => {
-            if (!currentTripId) return;
-            
-            showConfirm("중간 정산 확인", "현재 보이는 모든 경비 내역을 '정산 완료' 처리하시겠습니까? 이 작업은 되돌릴 수 없습니다.", async () => {
-                try {
-                    const expensesRef = collection(db, `artifacts/${appId}/public/data/trips/${currentTripId}/expenses`);
-                    const q = query(expensesRef, where("isSettled", "==", false));
-                    const querySnapshot = await getDocs(q);
-                    
-                    const batch = writeBatch(db);
-                    querySnapshot.forEach((doc) => {
-                        batch.update(doc.ref, { isSettled: true });
-                    });
-                    
-                    await batch.commit();
-                    showToast("중간 정산이 완료되었습니다.");
-                } catch (error) {
-                    console.error("중간 정산 오류:", error);
-                    showToast("중간 정산에 실패했습니다.");
-                }
-            });
-        });
-        
-        // 복사 버튼
-        document.getElementById('copy-trip-id-btn').addEventListener('click', () => {
-            const tripId = document.getElementById('trip-id-display').textContent;
-            const textArea = document.createElement("textarea");
-            textArea.value = tripId;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showToast("초대 코드가 복사되었습니다!");
-            } catch (err) {
-                console.error('복사 실패:', err);
-                showToast("복사에 실패했습니다.");
-            }
-            document.body.removeChild(textArea);
-        });
 
-        // --- 앱 시작 ---
-        function initializeAppOnLoad() {
-             const savedTripId = sessionStorage.getItem('currentTripId');
-             if (savedTripId) {
-                 joinTrip(savedTripId);
-             } else {
-                 showScreen(homeScreen);
-             }
+        function restart() {
+            currentQuestion = "Q1";
+            questionCount = 0;
+            questionHistory = [];
+            document.getElementById('resultArea').style.display = 'none';
+            document.getElementById('questionArea').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'block';
+            updateProgressBar(0);
         }
-        
-        initializeAppOnLoad();
-
     </script>
 </body>
 </html>
