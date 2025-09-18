@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>肌タイプ診断テスト</title>
+    <title>KOPHER 肌タイプ診断テスト</title>
     <style>
         * {
             margin: 0;
@@ -367,7 +367,9 @@
         </div>
 
         <div id="startScreen">
-            <img src="https://dp.image-qoo10.jp/dp2016/JP/GMKT.IMG/front_image/minishop/2024/03/19/e3f368a7-3fa0-43ba-b542-a3f1ae8b686c.s_110-w-fs-st_s.jpg" alt="Logo" class="logo-main">
+            <a href="https://www.qoo10.jp/shop/kopher" target="_blank">
+                <img src="https://dp.image-qoo10.jp/dp2016/JP/GMKT.IMG/front_image/minishop/2024/03/19/e3f368a7-3fa0-43ba-b542-a3f1ae8b686c.s_110-w-fs-st_s.jpg" alt="KOPHER Logo" class="logo-main">
+            </a>
             <p class="start-description">
                 簡単な質問に答えるだけで<br>
                 あなたの肌のタイプを診断しましょう。
@@ -432,9 +434,9 @@
             dry: {
                 emoji: "💧",
                 type: "乾燥肌",
-                description: "肌が乾燥しやすく、つっぱり感があるタイプです。十分な保湿と水分補給が必要で、油分と水分のバランスを整えることが大切です。リッチなクリームや美容液で、肌にうるおいを与えましょう。",
+                description: "",
                 products: [
-                    { name: "キュリペアダーマアンプル", url: "https://www.qoo10.jp/g/917815058" },
+                    { name: "キュリペア  ダーマアンプル", url: "https://www.qoo10.jp/g/917815058" },
                     { name: "キュリペア ソリューション", url: "https://www.qoo10.jp/g/1048654649" },
                     { name: "キュリペア メラクリーム", url: "https://www.qoo10.jp/g/917815387" },
                     { name: "キュリペア メルダーSOSシステム", url: "https://www.qoo10.jp/g/979244228" },
@@ -445,10 +447,10 @@
             oily: {
                 emoji: "✨",
                 type: "脂性肌",
-                description: "皮脂分泌が活発なタイプです。丁寧なクレンジングと共に、過剰な皮脂をコントロールしながらも水分は十分に補給することが重要です。さっぱりタイプの化粧水と軽めの乳液がおすすめです。",
+                description: "",
                 products: [
                     { name: "クレイプライムパックトゥフォーム", url: "https://www.qoo10.jp/g/998398572" },
-                    { name: "キュリペアダーマアンプル", url: "https://www.qoo10.jp/g/917815058" },
+                    { name: "キュリペア  ダーマアンプル", url: "https://www.qoo10.jp/g/917815058" },
                     { name: "キュリペア メラクリーム", url: "https://www.qoo10.jp/g/917815387" },
                     { name: "キュリペア サンドラッピング", url: "https://www.qoo10.jp/g/1127360604" }
                 ]
@@ -456,9 +458,9 @@
             trouble: {
                 emoji: "🌿",
                 type: "トラブル肌",
-                description: "ニキビやトラブルが起きやすいタイプです。低刺激の製品を使用し、肌への刺激を最小限に抑えて鎮静ケアに集中することが良いでしょう。清潔を保ちながら、優しいケアを心がけましょう。",
+                description: "",
                 products: [
-                    { name: "キュリペアダーマアンプル", url: "https://www.qoo10.jp/g/917815058" },
+                    { name: "キュリペア  ダーマアンプル", url: "https://www.qoo10.jp/g/917815058" },
                     { name: "キュリペア メラクリーム", url: "https://www.qoo10.jp/g/917815387" },
                     { name: "キュリペア メルダーSOSシステム", url: "https://www.qoo10.jp/g/979244228" },
                     { name: "キュリペア サンドラッピング", url: "https://www.qoo10.jp/g/1127360604" }
@@ -467,10 +469,10 @@
             sensitive: {
                 emoji: "🌸",
                 type: "敏感肌",
-                description: "外部刺激に敏感に反応するタイプです。低刺激性の製品を使用し、新しい製品はパッチテストをしてから使用することをお勧めします。肌のバリア機能を強化する優しいケアが大切です。",
+                description: "",
                 products: [
                     { name: "クレイプライムパックトゥフォーム", url: "https://www.qoo10.jp/g/998398572" },
-                    { name: "キュリペアソリューション", url: "https://www.qoo10.jp/g/1048654649" },
+                    { name: "キュリペア ソリューション", url: "https://www.qoo10.jp/g/1048654649" },
                     { name: "キュリペア メラクリーム", url: "https://www.qoo10.jp/g/917815387" },
                     { name: "キュリペア メルダーSOSシステム", url: "https://www.qoo10.jp/g/979244228" },
                     { name: "キュリペア サンドラッピング", url: "https://www.qoo10.jp/g/1127360604" },
@@ -584,7 +586,7 @@
                     <div class="result-type">${result.type}</div>
                     <div class="result-description">${result.description}</div>
                     <div class="recommend-section">
-                        <div class="recommend-title">おすすめ製品</div>
+                        <div class="recommend-title">おすすめ商品</div>
                         <div class="product-list">
                             ${productsHTML}
                         </div>
