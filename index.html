@@ -114,7 +114,14 @@
         }
         
         .house-rules-btn {
-            border-bottom: 1px solid #ff0000;
+            border-bottom: none;
+        }
+        
+        .bottom-spacer {
+            flex-shrink: 0;
+            height: 60px;
+            border: 1px solid #ff0000;
+            border-top: none;
         }
         
         .time-slot.active {
@@ -274,7 +281,7 @@
                 font-size: 16px;
             }
             
-            .instagram-link, .house-rules-btn {
+            .instagram-link, .house-rules-btn, .bottom-spacer {
                 height: 50px;
             }
             
@@ -364,6 +371,8 @@
         <div class="house-rules-btn">
             <button onclick="openModal()">HOUSE RULES</button>
         </div>
+        
+        <div class="bottom-spacer"></div>
     </div>
     
     <!-- Modal -->
